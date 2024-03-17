@@ -90,6 +90,7 @@ export default class Filemage {
     //删除所有文件
     DeleteAllFile(path = '') {
         if (!path) return
+        if(!this.ExistsFile(path)) return
         let fileList = this.GetfileList(path)
         for (let f of fileList) {
             let newPath = path + '/' + f
