@@ -1,4 +1,4 @@
-# <center>reset-qianyu-plugin_V4</center>
+# <center>reset-qianyu-plugin</center>
 
 ![动态访问量](https://count.kjchmc.cn/get/@reset-qianyu-plugin?theme=rule34)<br>
 [![Gitee](https://img.shields.io/badge/Gitee-千羽插件-black?style=flat-square&logo=gitee)](https://gitee.com/OvertimeBunny/reset-qianyu-plugin)
