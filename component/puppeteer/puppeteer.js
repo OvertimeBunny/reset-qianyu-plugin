@@ -15,12 +15,10 @@ class Puppeteer {
     this.browser = false
     this.lock = false
     this.shoting = []
-    /** 截图数达到时重启浏览器 避免生成速度越来越慢 */
     this.restartNum = 100
-    /** 截图次数 */
     this.renderNum = 0
     this.config = {
-      headless: true,  // 设置为 true 以无头模式运行
+      headless: true,
       args: [
         '--disable-gpu',
         '--disable-setuid-sandbox',
@@ -32,7 +30,6 @@ class Puppeteer {
     }
 
     if (cfg?.chromiumPath) {
-      /** chromium其他路径 */
       this.config.executablePath = cfg.chromiumPath
     }
 
@@ -59,9 +56,6 @@ class Puppeteer {
     }
   }
 
-  /**
-   * 初始化chromium
-   */
   async browserInit() {
     await this.initPupp()
     if (this.browser) return this.browser
@@ -73,7 +67,6 @@ class Puppeteer {
 
     logger.mark('puppeteer Chromium 启动中...')
 
-    /** 初始化puppeteer */
     this.browser = await puppeteer.launch(this.config).catch((err) => {
       logger.error(err.toString())
       if (String(err).includes('correct Chromium')) {
@@ -90,7 +83,6 @@ class Puppeteer {
 
     logger.mark('puppeteer Chromium 启动成功')
 
-    /** 监听Chromium实例是否断开 */
     this.browser.on('disconnected', (e) => {
       logger.error('Chromium实例关闭或崩溃！')
       this.browser = false
@@ -99,17 +91,6 @@ class Puppeteer {
     return this.browser
   }
 
-  /**
-   * `chromium` 截图
-   * @param data 模板参数
-   * @param data.tplFile 模板路径，必传
-   * @param data.saveId  生成html名称，为空name代替
-   * @param data.imgType  screenshot参数，生成图片类型：jpeg，png
-   * @param data.quality  screenshot参数，图片质量 0-100，jpeg是可传，默认90
-   * @param data.omitBackground  screenshot参数，隐藏默认的白色背景，背景透明。默认不透明
-   * @param data.path   screenshot参数，截图保存路径。截图图片类型将从文件扩展名推断出来。如果是相对路径，则从当前路径解析。如果没有指定路径，图片将不会保存到硬盘。
-   * @return oicq img
-   */
   async screenshot(name, data = {}) {
     if (!await this.browserInit()) {
       return false
@@ -142,7 +123,6 @@ class Puppeteer {
       page.close().catch((err) => logger.error(err))
     } catch (error) {
       logger.error(`图片生成失败:${name}:${error}`)
-      /** 关闭浏览器 */
       if (this.browser) {
         await this.browser.close().catch((err) => logger.error(err))
       }
@@ -160,16 +140,13 @@ class Puppeteer {
 
     this.renderNum++
 
-    /** 计算图片大小 */
     let kb = (buff.length / 1024).toFixed(2) + 'kb'
-
     logger.mark(`[图片生成][${name}][${this.renderNum}次] ${kb} ${logger.green(`${Date.now() - start}ms`)}`)
 
     this.restart()
 
     return segment.image(buff)
   }
-
 
   async urlScreenshot(url, path) {
     if (!await this.browserInit()) {
@@ -192,7 +169,6 @@ class Puppeteer {
       page.close().catch((err) => logger.error(err))
     } catch (error) {
       logger.error(`图片生成失败:${error}`)
-      /** 关闭浏览器 */
       if (this.browser) {
         await this.browser.close().catch((err) => logger.error(err))
       }
@@ -208,9 +184,7 @@ class Puppeteer {
 
     this.renderNum++
 
-    /** 计算图片大小 */
     let kb = (buff.length / 1024).toFixed(2) + 'kb'
-
     logger.mark(`[图片生成][${this.renderNum}次] ${kb} ${logger.green(`${Date.now() - start}ms`)}`)
 
     this.restart()
@@ -218,54 +192,42 @@ class Puppeteer {
     return segment.image(buff)
   }
 
-  /** 模板 */
   dealTpl(name, data) {
     let { tplFile, saveId = name } = data
     let savePath = qianyuPath + path.join(`/data/html/${name}/${saveId}.html`)
-    /** 读取html模板 */
     if (!this.html[tplFile]) {
       this.createDir(qianyuPath + `/data/html/${name}`)
       tplFile = qianyuPath + path.join(`/${tplFile}`)
       try {
         this.html[tplFile] = fs.readFileSync(tplFile, 'utf8')
-
       } catch (error) {
         logger.error(`加载html错误：${tplFile}`)
         return false
       }
-
       this.watch(tplFile)
     }
 
     data.resPath = `${_path}/resources/`
 
-    /** 替换模板 */
     let tmpHtml = template.render(this.html[tplFile], data)
 
-    /** 保存模板 */
     fs.writeFileSync(savePath, tmpHtml)
-
     logger.debug(`[图片生成][使用模板] ${savePath}`)
 
     return savePath
   }
 
-  /** 监听配置文件 */
   watch(tplFile) {
     if (this.watcher[tplFile]) return
-
     const watcher = chokidar.watch(tplFile)
     watcher.on('change', path => {
       delete this.html[tplFile]
       logger.mark(`[修改html模板] ${tplFile}`)
     })
-
     this.watcher[tplFile] = watcher
   }
 
-  /** 重启 */
   restart() {
-    /** 截图超过重启数时，自动关闭重启浏览器，避免生成速度越来越慢 */
     if (this.renderNum % this.restartNum == 0) {
       if (this.shoting.length <= 0) {
         setTimeout(async () => {
