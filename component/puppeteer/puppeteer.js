@@ -9,6 +9,7 @@ const _path = process.cwd()
 let cfg = Config.GetCfg("system/puppeteer")
 let qianyuPath = _path
 let puppeteer = {}
+
 class Puppeteer {
   constructor() {
     this.browser = false
@@ -19,12 +20,14 @@ class Puppeteer {
     /** 截图次数 */
     this.renderNum = 0
     this.config = {
-      headless: false,
+      headless: true,  // 设置为 true 以无头模式运行
       args: [
         '--disable-gpu',
         '--disable-setuid-sandbox',
         '--no-sandbox',
-        '--no-zygote'
+        '--no-zygote',
+        '--single-process',
+        '--disable-dev-shm-usage'
       ]
     }
 
