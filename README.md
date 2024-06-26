@@ -11,7 +11,7 @@ cd plugins/reset-qianyu-plugin
 ~~~
 
 ~~~
-git checkout V4崽
+git checkout V4
 ~~~
 
 
