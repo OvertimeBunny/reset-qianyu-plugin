@@ -1,4 +1,5 @@
 import QianyuPlugin from './lib/QianyuPlugin.js'
+
 const plugin = new QianyuPlugin()
 plugin.init()
 
