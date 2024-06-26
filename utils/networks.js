@@ -1,7 +1,7 @@
-import fetch from "node-fetch";
+import fetch from "node-fetch"
 import https from 'https'
-export default class networks {
 
+export default class networks {
     constructor(data) {
         this.url = data.url
         this.headers = data.headers || {}
@@ -32,7 +32,7 @@ export default class networks {
                 if (response.ok) {
                     resolve(response)
                 }
-                throw new Error('请求错误！');
+                throw new Error('请求错误！')
             }).catch(error => {
                 resolve({ status: 500, message: '请求错误' })
             })
@@ -45,23 +45,20 @@ export default class networks {
 
     async timeOut(time = 5000) {
         return Promise.race([fetch(this.url, this.config), new Promise((resolve, reject) => {
-            setTimeout(() => reject({ message: "请求超时", status: 504 }), time);
+            setTimeout(() => reject({ message: "请求超时", status: 504 }), time)
         })])
     }
 
     async getData() {
-        // 设置超时时间为5秒
         return new Promise(async (resolve, reject) => {
             this.timeOut(this.timeout).then(response => {
                 if (response.ok) {
                     return this.dealType(response)
                 }
-                throw new Error('请求错误！');
+                throw new Error('请求错误！')
             }).then(data => {
-                // 处理获取到的数据
                 resolve(data)
             }).catch(error => {
-                // 处理错误
                 resolve({ status: 500, message: error })
             })
         })
@@ -85,4 +82,3 @@ export default class networks {
         }
     }
 }
-

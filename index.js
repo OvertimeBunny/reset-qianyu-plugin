@@ -1,4 +1,5 @@
-import init from './lib/init.js'
-init.init()
+import QianyuPlugin from './lib/QianyuPlugin.js'
+const plugin = new QianyuPlugin()
+plugin.init()
 
-console.log("欢迎使用千羽重置版")
+console.log("欢迎使用适配V4版的千羽插件")
