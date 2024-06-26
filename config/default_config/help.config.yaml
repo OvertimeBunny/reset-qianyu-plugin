@@ -45,12 +45,6 @@ helplist:
       - title: 引用撤回
         desc: 在机器人发送的消息回复撤回，机器人会撤回该消息
         icon: "141"
-      - title: "#伪装@群友"
-        desc: 机器人换上at用户的头像昵称，并在10分钟内复读at用户的发言
-        icon: "141"
-      - title: "#停止|结束伪装"
-        desc: 停止机器人的伪装
-        icon: "141"
       - title: "早安/晚安"
         desc: 记录早晚安时间
         icon: "141"
@@ -116,26 +110,8 @@ helplist:
       - title: "#设置b站ck"
         desc: 设置机器人的b站cookie
         icon: "100"
-      - title: "#清除伪装缓存"
-        desc: 清除本地缓存的伪装数据，防止恢复时信息错误
-        icon: "100"
-      - title: "#群聊复读开启/关闭"
-        desc: 开启关闭群聊复读功能（被动复读）
-        icon: "100"
-      - title: "#打断复读开启/关闭"
-        desc: 开启关闭打断群聊复读功能
-        icon: "100"
-      - title: "#设置伪装cd10"
-        desc: 设置伪装cd为10分钟
-        icon: "100"
-      - title: "#设置伪装时长10"
-        desc: 设置伪装的时长为10分钟
-        icon: "100"
-      - title: "#设置伪装次数上限10"
-        desc: 设置每天伪装的次数上限为10
-        icon: "100"
-      - title: "#设置伪装群友次数1"
-        desc: 设置每天伪装群友的伪装次数上限为1
+      - title: "#设置抖音ck"
+        desc: 设置机器人的抖音cookie
         icon: "100"
       - title: "api检测"
         desc: 检测api是否能正常使用
